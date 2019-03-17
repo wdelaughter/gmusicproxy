@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
 # Google Play Music Proxy © Mario Di Raimondo < mario.diraimondo (at) gmail.com >
@@ -31,7 +31,7 @@ try: # Python 2
     from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
     from urlparse import urlparse, parse_qs
     from urllib2 import URLError, build_opener
-    from ConfigParser import SafeConfigParser
+    from ConfigParser import ConfigParser
     from StringIO import StringIO
     from SocketServer import ThreadingMixIn
 except ImportError: # Python 3
@@ -39,7 +39,7 @@ except ImportError: # Python 3
     from urllib.error import URLError
     from urllib.request import build_opener
     from http.server import HTTPServer, BaseHTTPRequestHandler
-    from configparser import SafeConfigParser
+    from configparser import ConfigParser
     from io import StringIO
     from socketserver import ThreadingMixIn
 
@@ -814,13 +814,13 @@ def getOptions(filename):
     parser.add_argument(
         '--keyring-entry', help='keyring entry to use, required if --keyring-service is used')
 
-    config = SafeConfigParser()
+    config = ConfigParser()
     args = parser.parse_args()
     fp = StringIO('[dummy]\n')
-    config.readfp(fp)
+    config.read_file(fp)
     if args.config:
         fp = StringIO('[dummy]\n' + args.config.read())
-        config.readfp(fp)
+        config.read_file(fp)
     else:
         for path in reversed(list(xdg.BaseDirectory.load_config_paths(filename))):
             fp = StringIO('[dummy]\n' + open(path, 'r').read())

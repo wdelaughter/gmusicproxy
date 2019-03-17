@@ -129,13 +129,13 @@ Feel free to open [bug reports][4] (complete of verbose output produced with opt
 ## Setup
 ### Requirements
 - a Google Play Music account with All Access subscription (some functionalities continue to work even with a free account)
-- a **Python** 2.7 interpreter (experimental support for **Python** 3 is included)
+- a **Python** interpreter
 - some python libs: *gmusicapi*, *netifaces*, *pyxdg*, *eyed3*, *python-daemon*
 
 ### Installation
 The following instructions have a Debian/Ubuntu GNU/Linux system as reference: nevertheless they work on any other GNU/Linux system using the right substitute of `apt-get`. It is known to work also on Mac OS X and Windows systems.
 
-In order to build some dependencies, you need for sure a working building system with `sudo apt-get install build-essential python2.7-dev`. It could be useful to add some necessary packages: `sudo apt-get install libffi-dev  libssl-dev`.
+In order to build some dependencies, you need for sure a working building system with `sudo apt-get install build-essential python3.7-dev`. It could be useful to add some necessary packages: `sudo apt-get install libffi-dev  libssl-dev`.
 
 - The easiest way, but not suggested, is to use the `pip` command to install the proxy with all the dependencies from PyPI and GitHub repositories:
 
@@ -155,7 +155,7 @@ In order to build some dependencies, you need for sure a working building system
 
     ```bash
     sudo apt-get install python-pip python-virtualenv virtualenvwrapper
-    mkvirtualenv -p /usr/bin/python2 gmusicproxy
+    mkvirtualenv -p /usr/bin/python3 gmusicproxy
     git clone https://github.com/diraimondo/gmusicproxy.git
     cd gmusicproxy
     pip install -r requirements.txt
