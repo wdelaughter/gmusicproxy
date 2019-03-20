@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# Google Play Music Proxy © Mario Di Raimondo < mario.diraimondo (at) gmail.com >
+# Google Play Music Proxy
+# © Mario Di Raimondo < mario.diraimondo (at) gmail.com >
 # "Let's stream Google Play Music using any music program"
 #
 # contributors:
@@ -27,14 +28,14 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-try: # Python 2
+try:  # Python 2
     from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
     from urlparse import urlparse, parse_qs
     from urllib2 import URLError, build_opener
     from ConfigParser import ConfigParser
     from StringIO import StringIO
     from SocketServer import ThreadingMixIn
-except ImportError: # Python 3
+except ImportError:  # Python 3
     from urllib.parse import urlparse, parse_qs
     from urllib.error import URLError
     from urllib.request import build_opener
@@ -115,7 +116,8 @@ class GetHandler(BaseHTTPRequestHandler):
         elif parsedPath.path == '/get_playlist' and 'id' in params:
             self._send_headers(200, 'audio/mpegurl',
                                'inline; filename=playlist.m3u')
-            self._get_playlist(id=params['id'][0], shuffle=True if ('shuffle' in params and params['shuffle'][0] == 'yes') else False)
+            self._get_playlist(id=params['id'][0], shuffle=True if (
+                'shuffle' in params and params['shuffle'][0] == 'yes') else False)
         elif parsedPath.path == '/get_album' and 'id' in params:
             self._send_headers(200, 'audio/mpegurl',
                                'inline; filename=playlist.m3u')
@@ -139,7 +141,8 @@ class GetHandler(BaseHTTPRequestHandler):
         elif parsedPath.path == '/get_collection':
             self._send_headers(200, 'audio/mpegurl',
                                'inline; filename=playlist.m3u')
-            self._get_collection( ratingthreshold=params['rating'][0] if 'rating' in params else 0, shuffle=True if ('shuffle' in params and params['shuffle'][0] == 'yes') else False, )
+            self._get_collection(ratingthreshold=params['rating'][0] if 'rating' in params else 0, shuffle=True if (
+                'shuffle' in params and params['shuffle'][0] == 'yes') else False, )
         elif parsedPath.path == '/search_id' and 'type' in params and ('title' in params or 'artist' in params):
             self._send_headers(200)
             if self._check_aa():
@@ -278,7 +281,8 @@ class GetHandler(BaseHTTPRequestHandler):
                 info = self._robust_retry(
                     lambda: api.get_track_info(store_track_id=id))
             else:
-                logger.error('Unsupported id \'%s\': report info to reproduce this to the author', id)
+                logger.error(
+                    'Unsupported id \'%s\': report info to reproduce this to the author', id)
         if info is None:
             logger.info('Streaming song with id \'%s\'', id)
             tagsBin = None
@@ -374,7 +378,8 @@ class GetHandler(BaseHTTPRequestHandler):
             cacheSize = len(cache)
             position = 0
             while position < cacheSize:
-                self.wfile.write(cache[position:position + min(cacheSize - position, downloadBlockSize)])
+                self.wfile.write(
+                    cache[position:position + min(cacheSize - position, downloadBlockSize)])
                 position += downloadBlockSize
                 if do_shoutcast:
                     self.wfile.write(self._icy_metadata(
@@ -510,7 +515,6 @@ class GetHandler(BaseHTTPRequestHandler):
         else:
             logger.warning("Playlist not found!")
 
-
     def _get_album(self, id):
         album = self._robust_retry(lambda: api.get_album_info(
             album_id=id, include_tracks=True))
@@ -583,7 +587,8 @@ class GetHandler(BaseHTTPRequestHandler):
             return
 
         if ratingthreshold > 0:
-            logger.info('Filtering out songs with rating lower than %s', ratingthreshold)
+            logger.info(
+                'Filtering out songs with rating lower than %s', ratingthreshold)
             for song in songs:
                 songrating = song.get('rating')
                 if songrating is not None:
@@ -705,7 +710,8 @@ class GetHandler(BaseHTTPRequestHandler):
                 info = self._robust_retry(
                     lambda: api.get_track_info(store_track_id=id))
             else:
-                logger.error('Unsupported id \'%s\': report info to reproduce this to the author', id)
+                logger.error(
+                    'Unsupported id \'%s\': report info to reproduce this to the author', id)
         if info is None:
             logger.warning('Song with id \'%s\' not found.', id)
         else:
@@ -797,7 +803,7 @@ def getOptions(filename):
     parser.add_argument('-l', '--log', help='log file')
     parser.add_argument('-f', '--daemon', default=False,
                         action='store_true', help='daemonize the program')
-    parser.add_argument('-v', '--disable-version-check', default=False,
+    parser.add_argument('-v', '--disable-version-check', default=True,
                         action='store_true', help='disable check for latest available version')
     parser.add_argument('-x', '--extended-m3u', default=False,
                         action='store_true', help='enable non-standard extended m3u headers')
@@ -946,10 +952,11 @@ def listKeyringBackends():
                     type(backend).__name__)
     sys.exit()
 
+
 if __name__ == '__main__':
     downloadBlockSize = 16 * 1024
-    cachePrefillSize = 60 * 320/8 * 1024 # 60 seconds at 320 kbit/s
-    maxCacheSize = 180 * 320/8 * 1024 # 180 seconds
+    cachePrefillSize = 60 * 320/8 * 1024  # 60 seconds at 320 kbit/s
+    maxCacheSize = 180 * 320/8 * 1024  # 180 seconds
     defaultNumberTracksStation = 50
     defaultNumberTopTracks = 20
     programDescription = 'Google Play Music Proxy'
