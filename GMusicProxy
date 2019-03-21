@@ -135,7 +135,7 @@ class GetHandler(BaseHTTPRequestHandler):
             if self._check_aa():
                 return
             result = self._search(type=params['type'][0].lower().strip() if 'type' in params else 'artist', query_title=params['title'][0].decode(
-                'latin-1') if 'title' in params else '', query_artist=params['artist'][0].decode('latin-1') if 'artist' in params else '', exact=params['exact'][0].lower().strip() if 'exact' in params else 'yes')
+                'latin-1') if 'title' in params else '', query_artist=params['artist'][0] if 'artist' in params else '', exact=params['exact'][0].lower().strip() if 'exact' in params else 'yes')
             if result:
                 self.wfile.write(result)
         elif parsedPath.path == '/get_by_search' and 'type' in params and ('title' in params or 'artist' in params):
@@ -144,8 +144,8 @@ class GetHandler(BaseHTTPRequestHandler):
             if ('type' in params and params['type'][0].lower().strip() != 'song'):
                 self._send_headers(200, 'audio/mpegurl',
                                    'inline; filename=playlist.m3u')
-            result = self._search(type=params['type'][0].lower().strip() if 'type' in params else 'artist', query_title=params['title'][0].decode('latin-1') if 'title' in params else '', query_artist=params['artist'][
-                                  0].decode('latin-1') if 'artist' in params else '', exact=params['exact'][0].lower().strip() if 'exact' in params else 'no', max_results=params['num_tracks'][0] if 'num_tracks' in params else None)
+            result = self._search(type=params['type'][0].lower().strip() if 'type' in params else 'artist', query_title=params['title'][0] if 'title' in params else '', query_artist=params['artist'][
+                                  0] if 'artist' in params else '', exact=params['exact'][0].lower().strip() if 'exact' in params else 'no', max_results=params['num_tracks'][0] if 'num_tracks' in params else None)
             if result and len(result) > 0:
                 if params['type'][0].lower().strip() == 'artist':
                     self._get_top_tracks_artist(result, numTracks=params['num_tracks'][
@@ -176,7 +176,7 @@ class GetHandler(BaseHTTPRequestHandler):
                 logger.warning('A new persistent station requires a name!')
                 return
             result = self._search(type=params['type'][0].lower().strip() if 'type' in params else 'artist', query_title=params['title'][0].decode(
-                'latin-1') if 'title' in params else '', query_artist=params['artist'][0].decode('latin-1') if 'artist' in params else '', exact=params['exact'][0].lower().strip() if 'exact' in params else 'no')
+                'latin-1') if 'title' in params else '', query_artist=params['artist'][0] if 'artist' in params else '', exact=params['exact'][0].lower().strip() if 'exact' in params else 'no')
             if result and len(result) > 0:
                 self._get_new_station(id=result, type=params['type'][0].lower().strip(), numTracks=params['num_tracks'][0] if 'num_tracks' in params else defaultNumberTracksStation, transient=params[
                                       'transient'][0].lower().strip() if 'transient' in params else 'yes', name=params['name'][0] if 'name' in params else transientStationName)
@@ -713,12 +713,12 @@ class GetHandler(BaseHTTPRequestHandler):
         try:
             BaseHTTPRequestHandler.handle_one_request(self)
         except CallFailure as e:
-            if '401 Client Error: Unauthorized' in e.message and config['device_id'] != '**auto**':
+            if '401 Client Error: Unauthorized' in e.message:
                 logger.warning(
                     'Server denied authorization, trying to reconnect...')
                 api.logout()
-                api.login(config['email'], config[
-                          'password'], config['device_id'])
+                device_id = gmusicapi.Mobileclient.FROM_MAC_ADDRESS
+                api.oauth_login(device_id)
                 if api.is_authenticated():
                     self.handle_one_request()
                 else:
@@ -765,13 +765,11 @@ def signalHandler(signal, frame):
 def getOptions(filename):
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--config', default=False, 
-                    action='store_true',help='specific configuration file to use')
+                    action='store_true',help='generate OAuth2 credential file (useful for first time execution)')
     parser.add_argument(
         '-e', '--email', help='email address of the Google account [required]')
     parser.add_argument(
         '-p', '--password', help='password of the Google account (or an application-specific one if two-factor authentication is enabled) [required]')
-    parser.add_argument(
-        '-d', '--device-id', help='the ID of a registered Android/iOS device [default: fake-id based on mac address of network card]')
     parser.add_argument(
         '-H', '--host', help='host in the generated URLs [default: autodetected local ip address]')
     parser.add_argument(
