@@ -28,22 +28,13 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-try:  # Python 2
-    from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
-    from urlparse import urlparse, parse_qs
-    from urllib2 import URLError, build_opener
-    from ConfigParser import ConfigParser
-    from StringIO import StringIO
-    from SocketServer import ThreadingMixIn
-except ImportError:  # Python 3
-    from urllib.parse import urlparse, parse_qs
-    from urllib.error import URLError
-    from urllib.request import build_opener
-    from http.server import HTTPServer, BaseHTTPRequestHandler
-    from configparser import ConfigParser
-    from io import StringIO
-    from socketserver import ThreadingMixIn
-
+from urllib.parse import urlparse, parse_qs
+from urllib.error import URLError
+from urllib.request import build_opener
+from http.server import HTTPServer, BaseHTTPRequestHandler
+from configparser import ConfigParser
+from io import StringIO
+from socketserver import ThreadingMixIn
 import socket
 import requests
 import signal
@@ -775,8 +766,8 @@ def signalHandler(signal, frame):
 
 def getOptions(filename):
     parser = argparse.ArgumentParser()
-    parser.add_argument('-c', '--config', type=open,
-                        help='specific configuration file to use')
+    parser.add_argument('-c', '--config', default=False, 
+                    action='store_true',help='specific configuration file to use')
     parser.add_argument(
         '-e', '--email', help='email address of the Google account [required]')
     parser.add_argument(
@@ -817,16 +808,10 @@ def getOptions(filename):
 
     config = ConfigParser()
     args = parser.parse_args()
-    fp = StringIO('[dummy]\n')
-    config.read_file(fp)
     if args.config:
-        fp = StringIO('[dummy]\n' + args.config.read())
-        config.read_file(fp)
-    else:
-        for path in reversed(list(xdg.BaseDirectory.load_config_paths(filename))):
-            fp = StringIO('[dummy]\n' + open(path, 'r').read())
-            config.readfp(fp)
-    configValues = dict(config.items('dummy'))
+        initOauth2(gmusicapi.Mobileclient.FROM_MAC_ADDRESS)
+    
+    configValues = dict(config.items())
 
     # adjust some names in order to make work configparser with argparse
     for key in list(configValues.keys()):
@@ -865,13 +850,18 @@ def listDevices():
                     d['friendlyName']) > 0 else '(None)', d['id'].replace('0x', ''))
         sys.exit()
 
+def initOauth2(device_id=gmusicapi.Mobileclient.FROM_MAC_ADDRESS):
+    api = gmusicapi.Mobileclient()
+    api.perform_oauth(open_browser=True)
+    api.oauth_login(device_id)
 
-def loginGM(email, password, device_id=gmusicapi.Mobileclient.FROM_MAC_ADDRESS):
+
+def loginGM(device_id=gmusicapi.Mobileclient.FROM_MAC_ADDRESS):
     requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-    api = gmusicapi.Mobileclient(debug_logging=config['debug'])
+    api = gmusicapi.Mobileclient()
     if config['debug']:
         api.logger = logger
-    api.login(email, password, device_id)
+    api.oauth_login(device_id)
     if not api.is_authenticated():
         logger.error('Sorry, those credentials weren\'t accepted.')
         sys.exit(1)
@@ -1014,13 +1004,7 @@ if __name__ == '__main__':
     if config['keyring_service'] is not None or config['keyring_entry'] is not None:
         config['password'] = getKeyringPassword()
 
-    if config['email'] is None or config['password'] is None or len(config['email']) == 0 or len(config['password']) == 0:
-        logger.error(
-            'Please, specify the credentials of your Google account in the config file or on the command-line.')
-        sys.exit(1)
-
-    api = loginGM(config['email'], config['password'], gmusicapi.Mobileclient.FROM_MAC_ADDRESS if config[
-                  'device_id'] == '**auto**' else config['device_id'])
+    api = loginGM(gmusicapi.Mobileclient.FROM_MAC_ADDRESS)
 
     if config['list_devices']:
         listDevices()
