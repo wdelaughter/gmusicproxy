@@ -174,16 +174,19 @@ In order to build some dependencies, you need for sure a working building system
 ## Usage
 With the service running on a computer on the LAN, it can be used by any others of the same network.
 
-To launch the proxy you need the credentials of your Google account: *email* and *password*. If you are using the 2-factor authentication, you have to create an application-specific password to be used with this program. Another usefull information would be the device ID of an Android/iOS device registered in your account: you can discover it using the option `--list-devices` on the command-line. As default a fake-id, based on the mac address of the main network card of the server running the service, is used.
+For the first time execute 
+```
+GMusicProxy --config
+```
+and follow the terminal instructions. This step will save your credentials in /home/USER/.local/share/gmusicapi/mobileclient.cred
 
-You can provide such necessary information, as well as other options, on the command-line of the program or using a configuration file.
-
+Now you can launch
+```
+GMusicProxy with sane default arguments
+```
 ### Command-line
 Here a list of the supported options on the command-line:
 
-- `--email`: email address of the Google account [required]
-- `--password`: password of the Google account [required]
-- `--device-id`: the ID of a registered Android/iOS device [default: fake-id based on mac address of network card]
 - `--host`: host in the generated URLs [default: autodetected local ip address]
 - `--bind-address`: ip address to bind to [default: 0.0.0.0=all]
 - `--port`: default TCP port to use [default: 9999]
@@ -203,13 +206,6 @@ Here a list of the supported options on the command-line:
 - `--keyring-entry`: keyring entry to use, required if `--keyring-service` is used
 
 ### Config file
-All the command-line options can be specified in a configuration file. An example of configuration with the strictly required options could look like this:
-
-  ```
-  email = my.email@gmail.com
-  password = my-secret-password
-  device-id = 54bbd32a309a34ef
-  ```
 
 When the proxy is launched, it searches for a file named `gmusicproxy.cfg` in the XDG-compliant folders like `/home/USER/.config/` or `/etc/xdg/`. It is possible to specify an arbitrary config file on the command-line using the option `--config`.
 
