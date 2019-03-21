@@ -33,7 +33,6 @@ from urllib.error import URLError
 from urllib.request import build_opener
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from configparser import ConfigParser
-from io import StringIO
 from socketserver import ThreadingMixIn
 import socket
 import requests
@@ -45,7 +44,6 @@ import tempfile
 import netifaces
 import pprint
 import argparse
-import xdg.BaseDirectory
 import logging
 import distutils.version
 import threading
