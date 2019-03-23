@@ -29,7 +29,6 @@
 #
 
 from urllib.parse import urlparse, parse_qs
-from urllib.error import URLError
 from urllib.request import build_opener
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from configparser import ConfigParser
@@ -45,7 +44,6 @@ import netifaces
 import pprint
 import argparse
 import logging
-import distutils.version
 import threading
 import gmusicapi
 import gmusicapi.utils
@@ -785,8 +783,6 @@ def getOptions(filename):
     parser.add_argument('-l', '--log', help='log file')
     parser.add_argument('-f', '--daemon', default=False,
                         action='store_true', help='daemonize the program')
-    parser.add_argument('-v', '--disable-version-check', default=True,
-                        action='store_true', help='disable check for latest available version')
     parser.add_argument('-x', '--extended-m3u', default=False,
                         action='store_true', help='enable non-standard extended m3u headers')
     parser.add_argument('-s', '--shoutcast-metadata', default=False, action='store_true',
@@ -807,7 +803,7 @@ def getOptions(filename):
     if args.config:
         initOauth2(gmusicapi.Mobileclient.FROM_MAC_ADDRESS)
     
-    configValues = dict(config.items())
+    configValues = dict(list(config.items()))
 
     # adjust some names in order to make work configparser with argparse
     for key in list(configValues.keys()):
@@ -875,25 +871,6 @@ def autodetectLocalIP():
                 return j['addr']
     return '127.0.0.1'
 
-
-def checkLatestVersion():
-    logger.debug('Fetching lastest version of %s...', programName)
-    try:
-        latestVersion = opener.open(urlLatestVersion).read()
-        logger.debug('latest available version: %s', latestVersion)
-        logger.debug('installed version: %s', programVersion)
-        if latestVersion == '':
-            raise ValueError
-        if distutils.version.StrictVersion(programVersion) < distutils.version.StrictVersion(latestVersion):
-            logger.warning(
-                'There is a new %s release of %s. Consider the idea to update your installation in order to keep it working!\n', latestVersion, programName)
-    except URLError:
-        logger.debug('Error in fetching version information')
-    except ValueError:
-        logger.debug('Error on malformed version data (\'%s\', \'%s\')',
-                     latestVersion, programVersion)
-
-
 def checkKeyringModule():
     if not 'keyring' in globals():
         logger.error('Python \'keyring\' module is not available!\n'
@@ -942,11 +919,10 @@ if __name__ == '__main__':
     programDescription = 'Google Play Music Proxy'
     programName = 'gmusicproxy'
     programMainAuthor = 'Mario Di Raimondo'
-    programVersion = '1.0.9b2'
+    programVersion = '1.0.8.2'
     configFilename = '%s.cfg' % programName
     transientStationName = '%s station ' % programDescription
     transientStationIds = []
-    urlLatestVersion = 'http://gmusicproxy.net/latest_version.php'
     config = dict()
 
     # remove previous root logging handler
@@ -1016,9 +992,6 @@ if __name__ == '__main__':
                           (programDescription, programVersion))]
 
     signal.signal(signal.SIGINT, signalHandler)
-
-    if not config['disable_version_check']:
-        checkLatestVersion()
 
     server = MultiThreadedHTTPServer(
         (config['bind_address'], config['port']), GetHandler)
