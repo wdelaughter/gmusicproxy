@@ -803,7 +803,7 @@ def getOptions(filename):
     if args.config:
         initOauth2(gmusicapi.Mobileclient.FROM_MAC_ADDRESS)
     
-    configValues = dict(list(config.items()))
+    configValues = dict(config.items())
 
     # adjust some names in order to make work configparser with argparse
     for key in list(configValues.keys()):
