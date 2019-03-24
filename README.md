@@ -5,6 +5,7 @@
 https://gmusicproxy.github.io
 
 contributors:
+- [Gianluca Boiano]
 - [Mario Di Raimondo](mailto:mario.diraimondo@gmail.com)
 - [Nick Depinet](mailto:depinetnick@gmail.com)
 - [Adam Prato](mailto:adam.prato@gmail.com)
@@ -31,6 +32,11 @@ This project is not supported nor endorsed by Google. Its aim is not the abuse o
 - stream any songs as standard MP3 complete of IDv3 tag with all the information and album image
 
 ### Changelog
+- 1.0.8.2 (2019-03-24)
+  - supported recent authentication with OAuth2 (please see the instructions below)
+  - removed .cfg configuration need
+  - removed version check
+  - more consistent Python 3 support  
 - 1.0.9-beta (unreleased):
   - experimental Python 3 support: soon the support for 2.7 version will be removed (thanks to Pierre Karashchuk)
   - fix issues with missing recording year and with `__get_matches` function
