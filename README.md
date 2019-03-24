@@ -154,7 +154,7 @@ In order to build some dependencies, you need for sure a working building system
 
     - `sudo apt-get install python-pip`
     - get a copy of the sources using one of these methods:
-      - `git clone https://github.com/diraimondo/gmusicproxy.git`
+      - `git clone https://github.com/M0Rf30/gmusicproxy.git`
       - download and extract a [tar][6] or [zip][7] archive of the last version
     - install it and all the dependencies using `sudo pip install -r requirements.txt` from the inside of the folder
     - use it from everywhere: `GMusicProxy`
