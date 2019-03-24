@@ -188,8 +188,10 @@ and follow the terminal instructions. This step will save your credentials in /h
 
 Now you can launch
 ```
-GMusicProxy with sane default arguments
+GMusicProxy 
 ```
+with sane default arguments
+
 ### Command-line
 Here a list of the supported options on the command-line:
 
