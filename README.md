@@ -5,7 +5,7 @@
 https://gmusicproxy.github.io
 
 contributors:
-- [Gianluca Boiano]
+- Gianluca Boiano
 - [Mario Di Raimondo](mailto:mario.diraimondo@gmail.com)
 - [Nick Depinet](mailto:depinetnick@gmail.com)
 - [Adam Prato](mailto:adam.prato@gmail.com)
