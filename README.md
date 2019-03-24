@@ -32,7 +32,7 @@ This project is not supported nor endorsed by Google. Its aim is not the abuse o
 - stream any songs as standard MP3 complete of IDv3 tag with all the information and album image
 
 ### Changelog
-- 1.0.8.2 (2019-03-24)
+- 1.0.9 (2019-03-24)
   - support recent authentication with OAuth2 (please see the instructions below)
   - removed .cfg configuration need (now your credentials are stored in folder /home/USER /.local/share/gmusicapi/mobileclient.cred)
   - removed version check
