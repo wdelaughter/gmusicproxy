@@ -204,7 +204,6 @@ Here a list of the supported options on the command-line:
 - `--debug`: enable debug messages
 - `--log`: log file
 - `--daemon`: daemonize the program
-- `--disable-version-check`: disable check for latest available version
 - `--extended-m3u`: enable non-standard extended m3u headers
 - `--shoutcast-metadata`: enable Shoutcast metadata protocol support (disabling IDv3 tags)
 - `--disable-playcount-increment`: disable the automatic increment of playcounts upon song fetch
