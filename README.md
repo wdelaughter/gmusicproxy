@@ -34,7 +34,7 @@ This project is not supported nor endorsed by Google. Its aim is not the abuse o
 ### Changelog
 - 1.0.8.2 (2019-03-24)
   - supported recent authentication with OAuth2 (please see the instructions below)
-  - removed .cfg configuration need
+  - removed .cfg configuration need (now your credentials are stored in folder /home/USER /.local/share/gmusicapi/mobileclient.cred)
   - removed version check
   - more consistent Python 3 support  
 - 1.0.9-beta (unreleased):
@@ -138,6 +138,7 @@ just type:
 ```
 <your AUR helper> -S gmusicproxy
 ```
+and follow the instructions
 
 ### Requirements
 - a Google Play Music account with All Access subscription (some functionalities continue to work even with a free account)
@@ -168,7 +169,7 @@ In order to build some dependencies, you need for sure a working building system
     ```bash
     sudo apt-get install python-pip python-virtualenv virtualenvwrapper
     mkvirtualenv -p /usr/bin/python3 gmusicproxy
-    git clone https://github.com/diraimondo/gmusicproxy.git
+    git clone https://github.com/M0Rf30/gmusicproxy.git
     cd gmusicproxy
     pip install -r requirements.txt
     ```
