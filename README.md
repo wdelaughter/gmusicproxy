@@ -198,7 +198,7 @@ Here a list of the supported options on the command-line:
 - `--host`: host in the generated URLs [default: autodetected local ip address]
 - `--bind-address`: ip address to bind to [default: 0.0.0.0=all]
 - `--port`: default TCP port to use [default: 9999]
-- `--config`: specific configuration file to use
+- `--config`: generate OAuth2 credential file (useful for first time execution)
 - `--disable-all-access`: disable All Access functionalities
 - `--list-devices`: list the registered devices
 - `--debug`: enable debug messages
@@ -213,9 +213,6 @@ Here a list of the supported options on the command-line:
 - `--keyring-service`: keyring service to use, takes precedence over `--password` if set
 - `--keyring-entry`: keyring entry to use, required if `--keyring-service` is used
 
-### Config file
-
-When the proxy is launched, it searches for a file named `gmusicproxy.cfg` in the XDG-compliant folders like `/home/USER/.config/` or `/etc/xdg/`. It is possible to specify an arbitrary config file on the command-line using the option `--config`.
 
 ### Using keyring to store the password
 Password can be retrieved from one of the available keyrings (e.g. KWallet, Freedesktop Secret Service, Windows Credential Vault, Mac OS X Keychain). Use command-line option `--list-keyring-backends` to find out, which keyring backends are supported on your platform.
