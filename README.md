@@ -133,6 +133,12 @@ At the moment I'm looking for another Maintainer for the project. I'll continue 
 Feel free to open [bug reports][4] (complete of verbose output produced with options `--debug` and `--log`) on GitHub, to fork the project and to make [pull requests][5] for your contributions.
 
 ## Setup
+### On Arch Linux
+just type:
+```
+<your AUR helper> -S gmusicproxy
+```
+
 ### Requirements
 - a Google Play Music account with All Access subscription (some functionalities continue to work even with a free account)
 - a **Python** interpreter
