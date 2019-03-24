@@ -33,10 +33,11 @@ This project is not supported nor endorsed by Google. Its aim is not the abuse o
 
 ### Changelog
 - 1.0.8.2 (2019-03-24)
-  - supported recent authentication with OAuth2 (please see the instructions below)
+  - support recent authentication with OAuth2 (please see the instructions below)
   - removed .cfg configuration need (now your credentials are stored in folder /home/USER /.local/share/gmusicapi/mobileclient.cred)
   - removed version check
   - more consistent Python 3 support  
+  - using latest gmusicapi 12.0.0
 - 1.0.9-beta (unreleased):
   - experimental Python 3 support: soon the support for 2.7 version will be removed (thanks to Pierre Karashchuk)
   - fix issues with missing recording year and with `__get_matches` function
