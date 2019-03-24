@@ -6,6 +6,7 @@
 # "Let's stream Google Play Music using any music program"
 #
 # contributors:
+#  - Gianluca Boiano
 #  - Nick Depinet < depinetnick (at) gmail.com >
 #  - Adam Prato < adam.prato (at) gmail.com >
 #  - Pierre Karashchuk < krchtchk (at) gmail.com >
@@ -103,7 +104,8 @@ class GetHandler(BaseHTTPRequestHandler):
         elif parsedPath.path == '/get_playlist' and 'id' in params:
             self._send_headers(200, 'audio/mpegurl',
                                'inline; filename=playlist.m3u')
-            self._get_playlist(id=params['id'][0], shuffle=True if ('shuffle' in params and params['shuffle'][0] == 'yes') else False)
+            self._get_playlist(id=params['id'][0], shuffle=True if (
+                'shuffle' in params and params['shuffle'][0] == 'yes') else False)
         elif parsedPath.path == '/get_album' and 'id' in params:
             self._send_headers(200, 'audio/mpegurl',
                                'inline; filename=playlist.m3u')
@@ -127,12 +129,14 @@ class GetHandler(BaseHTTPRequestHandler):
         elif parsedPath.path == '/get_collection':
             self._send_headers(200, 'audio/mpegurl',
                                'inline; filename=playlist.m3u')
-            self._get_collection( ratingthreshold=params['rating'][0] if 'rating' in params else 0, shuffle=True if ('shuffle' in params and params['shuffle'][0] == 'yes') else False, )
+            self._get_collection(ratingthreshold=params['rating'][0] if 'rating' in params else 0, shuffle=True if (
+                'shuffle' in params and params['shuffle'][0] == 'yes') else False, )
         elif parsedPath.path == '/search_id' and 'type' in params and ('title' in params or 'artist' in params):
             self._send_headers(200)
             if self._check_aa():
                 return
-            result = self._search(type=params['type'][0].lower().strip() if 'type' in params else 'artist', query_title=params['title'][0] if 'title' in params else '', query_artist=params['artist'][0] if 'artist' in params else '', exact=params['exact'][0].lower().strip() if 'exact' in params else 'yes')
+            result = self._search(type=params['type'][0].lower().strip() if 'type' in params else 'artist', query_title=params['title'][0] if 'title' in params else '',
+                                  query_artist=params['artist'][0] if 'artist' in params else '', exact=params['exact'][0].lower().strip() if 'exact' in params else 'yes')
             if result:
                 self.wfile.write(result)
         elif parsedPath.path == '/get_by_search' and 'type' in params and ('title' in params or 'artist' in params):
@@ -172,7 +176,8 @@ class GetHandler(BaseHTTPRequestHandler):
             if 'transient' in params and params['transient'][0].lower().strip() == 'no' and ('name' not in params or len(params['name'][0]) == 0):
                 logger.warning('A new persistent station requires a name!')
                 return
-            result = self._search(type=params['type'][0].lower().strip() if 'type' in params else 'artist', query_title=params['title'][0] if 'title' in params else '', query_artist=params['artist'][0] if 'artist' in params else '', exact=params['exact'][0].lower().strip() if 'exact' in params else 'no')
+            result = self._search(type=params['type'][0].lower().strip() if 'type' in params else 'artist', query_title=params['title'][0] if 'title' in params else '',
+                                  query_artist=params['artist'][0] if 'artist' in params else '', exact=params['exact'][0].lower().strip() if 'exact' in params else 'no')
             if result and len(result) > 0:
                 self._get_new_station(id=result, type=params['type'][0].lower().strip(), numTracks=params['num_tracks'][0] if 'num_tracks' in params else defaultNumberTracksStation, transient=params[
                                       'transient'][0].lower().strip() if 'transient' in params else 'yes', name=params['name'][0] if 'name' in params else transientStationName)
@@ -264,7 +269,8 @@ class GetHandler(BaseHTTPRequestHandler):
                 info = self._robust_retry(
                     lambda: api.get_track_info(store_track_id=id))
             else:
-                logger.error('Unsupported id \'%s\': report info to reproduce this to the author', id)
+                logger.error(
+                    'Unsupported id \'%s\': report info to reproduce this to the author', id)
         if info is None:
             logger.info('Streaming song with id \'%s\'', id)
             tagsBin = None
@@ -360,7 +366,8 @@ class GetHandler(BaseHTTPRequestHandler):
             cacheSize = len(cache)
             position = 0
             while position < cacheSize:
-                self.wfile.write(cache[position:position + min(cacheSize - position, downloadBlockSize)])
+                self.wfile.write(
+                    cache[position:position + min(cacheSize - position, downloadBlockSize)])
                 position += downloadBlockSize
                 if do_shoutcast:
                     self.wfile.write(self._icy_metadata(
@@ -496,7 +503,6 @@ class GetHandler(BaseHTTPRequestHandler):
         else:
             logger.warning("Playlist not found!")
 
-
     def _get_album(self, id):
         album = self._robust_retry(lambda: api.get_album_info(
             album_id=id, include_tracks=True))
@@ -569,7 +575,8 @@ class GetHandler(BaseHTTPRequestHandler):
             return
 
         if ratingthreshold > 0:
-            logger.info('Filtering out songs with rating lower than %s', ratingthreshold)
+            logger.info(
+                'Filtering out songs with rating lower than %s', ratingthreshold)
             for song in songs:
                 songrating = song.get('rating')
                 if songrating is not None:
@@ -691,7 +698,8 @@ class GetHandler(BaseHTTPRequestHandler):
                 info = self._robust_retry(
                     lambda: api.get_track_info(store_track_id=id))
             else:
-                logger.error('Unsupported id \'%s\': report info to reproduce this to the author', id)
+                logger.error(
+                    'Unsupported id \'%s\': report info to reproduce this to the author', id)
         if info is None:
             logger.warning('Song with id \'%s\' not found.', id)
         else:
@@ -760,8 +768,8 @@ def signalHandler(signal, frame):
 
 def getOptions(filename):
     parser = argparse.ArgumentParser()
-    parser.add_argument('-c', '--config', default=False, 
-                    action='store_true',help='generate OAuth2 credential file (useful for first time execution)')
+    parser.add_argument('-c', '--config', default=False,
+                        action='store_true', help='generate OAuth2 credential file (useful for first time execution)')
     parser.add_argument(
         '-e', '--email', help='email address of the Google account [required]')
     parser.add_argument(
@@ -800,7 +808,7 @@ def getOptions(filename):
     args = parser.parse_args()
     if args.config:
         initOauth2(gmusicapi.Mobileclient.FROM_MAC_ADDRESS)
-    
+
     configValues = dict(config.items())
 
     # adjust some names in order to make work configparser with argparse
@@ -840,6 +848,7 @@ def listDevices():
                     d['friendlyName']) > 0 else '(None)', d['id'].replace('0x', ''))
         sys.exit()
 
+
 def initOauth2(device_id=gmusicapi.Mobileclient.FROM_MAC_ADDRESS):
     api = gmusicapi.Mobileclient()
     api.perform_oauth(open_browser=True)
@@ -868,6 +877,7 @@ def autodetectLocalIP():
             for j in iface:
                 return j['addr']
     return '127.0.0.1'
+
 
 def checkKeyringModule():
     if not 'keyring' in globals():
@@ -908,10 +918,11 @@ def listKeyringBackends():
                     type(backend).__name__)
     sys.exit()
 
+
 if __name__ == '__main__':
     downloadBlockSize = 16 * 1024
-    cachePrefillSize = 60 * 320/8 * 1024 # 60 seconds at 320 kbit/s
-    maxCacheSize = 180 * 320/8 * 1024 # 180 seconds
+    cachePrefillSize = 60 * 320/8 * 1024  # 60 seconds at 320 kbit/s
+    maxCacheSize = 180 * 320/8 * 1024  # 180 seconds
     defaultNumberTracksStation = 50
     defaultNumberTopTracks = 20
     programDescription = 'Google Play Music Proxy'
