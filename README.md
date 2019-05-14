@@ -69,7 +69,7 @@ and follow the instructions
 ### Requirements
 - a Google Play Music account with All Access subscription (some functionalities continue to work even with a free account)
 - a Python 3 interpreter
-- many python libs: *gmusicapi*, *netifaces*, *mutagen*, *eyed3*, *python-daemon*, *gpsoauth*
+- some python libs: *gmusicapi*, *netifaces*, *eyed3*, *python-daemon*
 
 ### Installation
 
