@@ -1,12 +1,10 @@
-# GMusicProxy – Google Play Music Proxy 
+# GMusicProxy – Google Play Music Proxy
 
 *"Let's stream Google Play Music using any media-player"*
 
-https://gmusicproxy.github.io
-
 contributors:
-- Gianluca Boiano
-- [Mario Di Raimondo](mailto:mario.diraimondo@gmail.com)
+- [Gianluca Boiano](mailto:)
+- [Mario Di Raimondo](mailto:)
 - [Nick Depinet](mailto:depinetnick@gmail.com)
 - [Adam Prato](mailto:adam.prato@gmail.com)
 - [Pierre Karashchuk](mailto:krchtchk@gmail.com)
@@ -18,11 +16,7 @@ License: **GPL v3**
 ## About
 This program permits the use of Google Play Music with All Access subscription with any music player that is able to stream MP3 files and to manage M3U playlists (e.g., [MPD server][1], [VLC][2], ...). It can work also with a free account without All Access extras.
 
-Google has released a nice music service with the possibility to stream all the available music using the All Access subscription. The Google-way to listen your collection and the stations is by means of Android devices or any web browser. If you want to use your TVs or HiFi audio systems, the main tool is the Chromecast key (or its audio variant). These devices are closed and limited in someway. I already got a music-system at home based on a small Raspberry-PI connected to my HiFi audio system (using a professional DAC): it makes use of [MPD][1] and I wanted to keep it.
-
-My project is based on the great [Unofficial Google Play Music API][3] of Simon Weber: it already permits to create URLs to stream the tracks as regular MP3 but they expire in 1 minute! Keeping this proxy running, it can generate persistent local URLs that never expire and that can be used in any media-player.
-
-This project is not supported nor endorsed by Google. Its aim is not the abuse of the service but the one to improve the access to it. I'm not responsible of its misuse.
+This project is not supported nor endorsed by Google.
 
 ### Features
 - create persistent URLs to all the tracks, albums and stations available on the Google Play Music + All Access platform
@@ -32,89 +26,21 @@ This project is not supported nor endorsed by Google. Its aim is not the abuse o
 - stream any songs as standard MP3 complete of IDv3 tag with all the information and album image
 
 ### Changelog
+- 1.0.10 (synced with jeffmhubbard fork):
+  - added `_get_promoted` to make use of gmusicapi's `get_promoted_songs`
+  - added `_get_listen_now` to return Listen Now artist stations and albums
+  - added `_get_situations` to return Listen "situations" 
 - 1.0.9 (2019-03-24)
   - support recent authentication with OAuth2 (please see the instructions below)
   - removed .cfg configuration need (now your credentials are stored in folder /home/USER /.local/share/gmusicapi/mobileclient.cred)
-  - removed version check
-  - more consistent Python 3 support  
-  - using latest gmusicapi 12.0.0
+-  - removed version check
+-  - more consistent Python 3 support  
+-  - using latest gmusicapi 12.0.0
 - 1.0.9-beta (unreleased):
   - experimental Python 3 support: soon the support for 2.7 version will be removed (thanks to Pierre Karashchuk)
   - fix issues with missing recording year and with `__get_matches` function
   - less strict version requirement for gmusicapi (easy life for packaging managers)
-- 1.0.8 (2017-02-07):
-  - daemon-mode is not supported under Windows (but it could be under cygwin...): this allows to run gmusicproxy without the `daemon` module
-  - support for on-the-fly shuffling of playlists and collections
-  - support for public/shared playlists
-  - support filtering collection returned from get_collection by minimum rating (thanks to Mark Gillespie)
-  - cache the end of song in RAM in order to prevent some connection timeout errors (thanks to Alex Busenius)
-  - possible fix for the long standing bug on the truncated download of some songs
-  - support for recording year in IDv3 tag (thanks to redlulz)
-  - fix for deadlock in cache management and in ids handling
-- 1.0.7 (2017-01-09):
-  - possibility to bind to a specific network interface (thanks to fgtham)
-  - bug fixes (shoutcast metadata)
-  - early release to fix the lack of requirement for gmusicapi 10.1.0 in the setup
-- 1.0.6 (2016-12-03):
-  - support for concurrent requests (thanks to Pierre Karashchuk)
-  - support for HEAD requests
-  - better shoutcast headers handling
-  - documentation improvements
-  - a more robust re-authentication system (thanks to Alex Busenius)
-  - new keyring support for desktop computers (thanks to Alex Busenius)
-  - supported recent gmusicapi v.10.1.0 (fixed bugs and packaging problems)
-  - bug fixes (shoutcast metadata support, content-disposition header, ...)
-- 1.0.5 (2016-05-04):
-  - send to the client the effective song size: this should allow the player (VLC) to properly show the progress of the playback
-  - make HTTP connection for version control more robust: not fatal on error (my HTTP server is down: sorry!)
-  - new support to the Shoutcast metadata protocol: at the moment alternative to the IDv3 tag supporto, so disabled by default (thanks to Adam Prato)
-- 1.0.4 (2016-02-27):
-  - implemented a RAM-based cache for songs list: it speeds-up streaming of songs in collection or if AA is disabled
-  - implemented the automatic increment of the playcounts of the fetched songs; the previous behavior can be restored with option `disable-playcount-increment`
-- 1.0.3 (2015-12-07):
-  - added `Access-Control-Allow-Origin: *` header to allow web-pages to interact with GMusicProxy API
-  - bump `gmusicapi` requirement to 7.0.0 to fix validation errors
-  - fix in documentation
-  - fix/workaround to use python-daemon>=2.1
-- 1.0.2 (2015-07-16):
-  - added possibility to get the full discography of a specified artist using `get_discography_artist` (thanks to e-matterson for the idea and an attempted implementation)
-- 1.0.1 (2015-06-21):
-  - switched on gmusicapi 6.0.0
-  - the use of a registered device ID is no longer stricly necessary but it is still suggested
-- 1.0.0 (2015-06-12):
-  - finally fixed the support of uploaded tracks: now GMusicProxy can really work without a paid subscription!
-  - code cleanup
-  - some bugs squashing
-  - now it is possible to support the project with a small [donation][8]
-- 0.9.9.2 (2015-06-04):
-  - fixed breakage on login due to gmusicapi change (thanks for the pull request to @Mlmlte)
-  - reverted on gmusicapi 5.0.0: it was released!
-  - restored `--list-devices` functionality moving on new mobileclient `get_registered_devices` function of gmusicapi
-- 0.9.9 (2015-05-27):
-  - fixed login problem using the devel branch (5.0.0-dev0) of gmusicapi (today not yet released)
-  - changed the installation instructions using pip `requirements.txt` file: this permits the automatic deploy of gmusicapi from github
-  - the functionality `--list-devices` is actually broken: keep a copy of you device ids!
-- 0.9.8 (2014-09-14):
-  - new option `extended-m3u`: it optionally extends `#EXTINF:` lines of the produced M3U lists to a non-standard format like `artist - song title - album title`
-- 0.9.7 (2014-08-25):
-  - merged a contribution by Nick Depinet to report all the possible matches of a search (support required by project CSH DJ)
-- 0.9.6 (2014-08-08):
-  - added support for returning multiple songs in the search results using type `songs` for `get_by_search`
-- 0.9.5 (2014-03-23):
-  - added support for the dynamic 'I'm feeling lucky' station: `get_ifl_station`
-- 0.9.4 (2014-02-02):
-  - added support for 'album artist' tag (requires a development version >= 0.7.5-beta of eyed3 lib)
-  - added control on startup for new versions
-- 0.9.2 (2013-10-30):
-  - added the possibility to rate songs (like/dislike)
-- 0.9.1 (2013-10-05):
-  - a new and more robust message/log system
-  - possibility to daemonize the proxy
-- 0.8 (2013-09-22):
-  - rewrote command-line/config system
-  - possibility to disable AA features for a free GM account
-  - improved documentation
-- 0.6 (2013-09-15): first public version
+- (previous changelog truncated)
 
 ### Related projects
 
@@ -125,15 +51,14 @@ This project is not supported nor endorsed by Google. Its aim is not the abuse o
 - gpmplay (a bash script to easily search with GMusicproxy): https://github.com/onespaceman/gmpplay
 - g-music (Emacs client for gmusicproxy and mpd): https://github.com/bodicsek/g-music
 - GMusicProxyGui (a C# GUI for the GMusicProxy): https://github.com/Poket-Jony/GMusicProxyGui
+- PlayFetch (a full-featured helper written in Python): https://github.com/jeffmhubbard/playfetch
 
 ## Support
-### Donations
-At the moment I'm looking for another Maintainer for the project. I'll continue to accept [donations][8] as long as I can't find who succeed me just to be able to keep up the Google server subscription.  Many thanks for the donations received in these years. 
-
 ### Issues
 Feel free to open [bug reports][4] (complete of verbose output produced with options `--debug` and `--log`) on GitHub, to fork the project and to make [pull requests][5] for your contributions.
 
 ## Setup
+
 ### On Arch Linux
 just type:
 ```
@@ -143,38 +68,23 @@ and follow the instructions
 
 ### Requirements
 - a Google Play Music account with All Access subscription (some functionalities continue to work even with a free account)
-- a **Python** interpreter
-- some python libs: *gmusicapi*, *netifaces*, *pyxdg*, *eyed3*, *python-daemon*
+- a Python 3 interpreter
+- many python libs: *gmusicapi*, *netifaces*, *mutagen*, *eyed3*, *python-daemon*, *gpsoauth*
 
 ### Installation
-The following instructions have a Debian/Ubuntu GNU/Linux system as reference: nevertheless they work on any other GNU/Linux system using the right substitute of `apt-get`. It is known to work also on Mac OS X and Windows systems.
-
-In order to build some dependencies, you need for sure a working building system with `sudo apt-get install build-essential python3.7-dev`. It could be useful to add some necessary packages: `sudo apt-get install libffi-dev  libssl-dev`.
-
-- The easiest way, but not suggested, is to use the `pip` command to install the proxy with all the dependencies from PyPI and GitHub repositories:
-
-    - `sudo apt-get install python-pip`
-    - get a copy of the sources using one of these methods:
-      - `git clone https://github.com/M0Rf30/gmusicproxy.git`
-      - download and extract a [tar][6] or [zip][7] archive of the last version
-    - install it and all the dependencies using `sudo pip install -r requirements.txt` from the inside of the folder
-    - use it from everywhere: `GMusicProxy`
-
-  The `pip install ...` command could require the options `--allow-external eyed3 --allow-unverified eyed3` on some systems in order to validate the installation of `eyed3`.
-
-  Importante note: the usage of `sudo pip ...` commands could mess up your main packaging system; consider the next method.
 
 - The right way to use an under-development python project makes use of `virtualenv` and `virtualenvwrapper` utilities:
   - install the proxy once:
 
     ```bash
     sudo apt-get install python-pip python-virtualenv virtualenvwrapper
-    mkvirtualenv -p /usr/bin/python3 gmusicproxy
+    mkvirtualenv -p /usr/bin/python2 gmusicproxy
     git clone https://github.com/M0Rf30/gmusicproxy.git
     cd gmusicproxy
     pip install -r requirements.txt
     ```
     note: it could be necessary to close/reopen the shell in order to use virtualenvwrapper aliases
+
   - launch the proxy when you need it:
 
     ```bash
@@ -186,19 +96,6 @@ In order to build some dependencies, you need for sure a working building system
     - clean-up the virtualenv using `deactivate ; rmvirtualenv gmusicproxy` and reinstall everything as before.
 
 ## Usage
-With the service running on a computer on the LAN, it can be used by any others of the same network.
-
-For the first time execute 
-```
-GMusicProxy --config
-```
-and follow the terminal instructions. This step will save your credentials in /home/USER/.local/share/gmusicapi/mobileclient.cred
-
-Now you can launch
-```
-GMusicProxy 
-```
-with sane default arguments
 
 ### Command-line
 Here a list of the supported options on the command-line:
@@ -206,35 +103,16 @@ Here a list of the supported options on the command-line:
 - `--host`: host in the generated URLs [default: autodetected local ip address]
 - `--bind-address`: ip address to bind to [default: 0.0.0.0=all]
 - `--port`: default TCP port to use [default: 9999]
-- `--config`: generate OAuth2 credential file (useful for first time execution)
+- `--oauth`: generate OAuth2 credentials (opens browser)
 - `--disable-all-access`: disable All Access functionalities
-- `--list-devices`: list the registered devices
 - `--debug`: enable debug messages
 - `--log`: log file
 - `--daemon`: daemonize the program
 - `--extended-m3u`: enable non-standard extended m3u headers
 - `--shoutcast-metadata`: enable Shoutcast metadata protocol support (disabling IDv3 tags)
 - `--disable-playcount-increment`: disable the automatic increment of playcounts upon song fetch
-- `--keyring-backend`: name of the keyring backend to use instead of the default one
-- `--list-keyring-backends`: list the available keyring backends
-- `--keyring-service`: keyring service to use, takes precedence over `--password` if set
-- `--keyring-entry`: keyring entry to use, required if `--keyring-service` is used
 
-
-### Using keyring to store the password
-Password can be retrieved from one of the available keyrings (e.g. KWallet, Freedesktop Secret Service, Windows Credential Vault, Mac OS X Keychain). Use command-line option `--list-keyring-backends` to find out, which keyring backends are supported on your platform.
-If the default keyring backend is not what you want, you can override it using option `--keyring-backend`.
-
-To read the password from the keyring, specify the options `--keyring-service` and `--keyring-entry`. Use the corresponding keyring manager to store the password or find entry name for one of your existing passwords.
-
-E.g. for KWallet, you can list available service names and entries as follows:
-
-  ```bash
-  # list service names
-  kwallet-query -l kdewallet -f ""
-  # list entries of service "Passwords"
-  kwallet-query -l kdewallet -f "Passwords"
-  ```
+Before starting the proxy for the first time, run `GMusicProxy --oauth` to generate OAuth2 credentials. Follow the prompts, and paste the code into your terminal. *This requires All Access.*
 
 ### URL-based interface
 The only way to use the service is to query the proxy by means of properly formatted HTTP requests over the configured TCP port. Such URLs can be used directly in music programs or in scripts or in any browser. A URL looks like this: `http://host:port/command?param_1=value&param_2=value`. I don't apply any validation to the submitted values: please, be nice with the proxy and don't exploit it! :)
@@ -246,7 +124,10 @@ Here a list of the supported requests (with some restricted by the availability 
 - `/get_collection`: reports an M3U playlist with all the songs in your personal collection; the resulting list can be shuffled and/or filtered using the rating; note that not all the rated (liked) songs belong to your collection.
   Allowed parameters:
      - `shuffle`: if the collection has to be shuffled [default: no]
-	 - `rating`: an integer value (typically between 1-5) to filter out low rated or unrated songs form your collection
+     - `rating`: an integer value (typically between 1-5) to filter out low rated or unrated songs form your collection
+- `/get_promoted`: reports an M3U playlist of "promoted tracks"; the resulting list can be shuffled; this is, more or less, your Thumb's Up playlist, kinda.
+  Allowed parameters:
+     - `shuffle`: if the playlist has to be shuffled [default: no]
 - `/search_id`: reports the unique ID as result of a search for an artist, a song or an album.
   Allowed parameters:
      - `type`: search for `artist`, `album` or `song` [required]
@@ -291,6 +172,17 @@ Here a list of the supported requests (with some restricted by the availability 
 - `/get_ifl_station`: reports an M3U playlist of tracks associated to the automatic "I'm feeling lucky" station  [requires A.A.].
   Allowed parameters:
      - `num_tracks`: the number of tracks to extract [default: 20]
+- `/get_listen_now`: reports Listen Now stations and albums as M3U playlist (with URLs to other M3U playlist) or as plain-text list (with one playlist per line).
+  Allowed parameters:
+     - `type`: search for `artist` or `album` [required]
+     - `format`: `m3u` for an M3U list or `text` for a plain-text list with lines like `Name of Station|URL to an M3U playlist` [default: `m3u`]
+     - `separator`: a separator for the plain-text lists [default: `|`]
+     - `only_url`: a `yes` creates a list of just URLs in the plain-text lists (the name of the album is totally omitted) [default: `no`]
+- `/get_situations`: reports Listen Now Situations (curated playlists) as M3U playlist (with URLs to other M3U playlist) or as plain-text list (with one playlist per line).
+  Allowed parameters:
+     - `format`: `m3u` for an M3U list or `text` for a plain-text list with lines like `Name of Playlist|URL to an M3U playlist` [default: `m3u`]
+     - `separator`: a separator for the plain-text lists [default: `|`]
+     - `only_url`: a `yes` creates a list of just URLs in the plain-text lists (the name of the album is totally omitted) [default: `no`]
 - `/get_playlist`: reports the content of a registered playlist in the M3U format; the list can be also shuffled.
   Allowed parameters:
      - `id`: the unique identifier of the playlist [required]
@@ -352,14 +244,7 @@ Here a list of the supported requests (with some restricted by the availability 
   ```
 
 
-[0]: http://gmusicproxy.net/
+[0]: http://gmusicproxy.github.io/
 [1]: http://www.musicpd.org/
 [2]: http://www.videolan.org/vlc/
 [3]: https://github.com/simon-weber/gmusicapi
-[4]: https://github.com/diraimondo/gmusicproxy/issues
-[5]: https://github.com/diraimondo/gmusicproxy/pulls
-[6]: https://github.com/leoedin/gmusicproxy/archive/master.tar.gz
-[7]: https://github.com/leoedin/gmusicproxy/archive/master.zip
-[8]: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=mario%2ediraimondo%40gmail%2ecom&lc=US&item_name=GMusicProxy%20support&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted
-
-![ga tracker](https://www.google-analytics.com/collect?v=1&a=257770996&t=pageview&dl=https%3A%2F%2Fgithub.com%2Fdiraimondo%2Fgmusicproxy&ul=en-us&de=UTF-8&cid=978224512.1377738459&tid=UA-3018229-6&z=887657232 "ga tracker")

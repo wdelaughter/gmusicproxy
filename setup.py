@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import re
-from setuptools import setup, find_packages
-import sys
+from setuptools import setup
 import os
 
 GMUSICPROXYFILE = 'GMusicProxy'
@@ -23,9 +22,10 @@ setup(
     url='https://github.com/diraimondo/gmusicproxy',
     scripts=[GMUSICPROXYFILE],
     license=open('LICENSE').read(),
-    description='Google Play Music Proxy - "Let\'s stream Google Play Music using any music program"',
+    description='Google Play Music Proxy - "Let\'s stream Google Play Music using any media-player"',
     long_description=(open('README.md').read()),
-    install_requires=['gmusicapi>=10.1.0,<11.0.0', 'netifaces>=0.10.4',
-                      'pyxdg>=0.25', 'eyed3>=0.7.8', 'python-daemon>=2.0.5' if not os.name == 'nt' else ''],
-    extras_require={'keyring': 'keyring>=10.0'}
+    install_requires=['gmusicapi>=12.0.0', 'netifaces>=0.10.9',
+                      'eyeD3>=0.8.10', 'python-daemon>=2.2.3',
+                      'mutagen>=1.42.0', 'gpsoauth>=0.4.1',
+                      'oauth2client>=4.1.3' if not os.name == 'nt' else ''],
 )

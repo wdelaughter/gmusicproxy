@@ -1,6 +1,7 @@
-gmusicapi
-netifaces
-xdg
-eyed3
-daemon
-keyring
+eyeD3==0.8.10
+gmusicapi==12.1.0
+netifaces==0.10.9
+oauth2client==4.1.3
+python-daemon==2.2.3
+mutagen==1.42.0
+gpsoauth==0.4.1
