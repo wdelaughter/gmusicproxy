@@ -4,6 +4,7 @@
 
 contributors:
 - [Gianluca Boiano](mailto:)
+- [Jeff M. Hubbard](mailto:)
 - [Mario Di Raimondo](mailto:)
 - [Nick Depinet](mailto:depinetnick@gmail.com)
 - [Adam Prato](mailto:adam.prato@gmail.com)
